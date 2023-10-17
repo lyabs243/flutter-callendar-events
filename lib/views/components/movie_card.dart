@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_events/models/utils.dart';
+import 'package:flutter_calendar_events/views/components/pick_calendar_dialog.dart';
 import 'package:intl/intl.dart';
 
 class MovieCard extends StatefulWidget {
@@ -58,7 +59,15 @@ class _MovieCardState extends State<MovieCard> {
             onPressed: (state == MovieEventState.added)?
               null:
               () {
-
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const AlertDialog(
+                      title: Text('Pick a calendar'),
+                      content: PickCalendarDialog(),
+                    );
+                  },
+                );
               },
             icon: SizedBox(
               height: 20,
