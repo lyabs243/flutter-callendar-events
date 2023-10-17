@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_events/views/components/movie_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -57,9 +58,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  return Center(
-                    child: Text('Movie $index'),
-                  );
+                  return MovieCard(key: Key('movie-$index'),);
                 },
               )
             ),
