@@ -1,7 +1,11 @@
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 
 class PickCalendarDialog extends StatefulWidget {
-  const PickCalendarDialog({Key? key}) : super(key: key);
+
+  final List<Calendar> calendars;
+
+  const PickCalendarDialog({Key? key, required this.calendars}) : super(key: key);
 
   @override
   State<PickCalendarDialog> createState() => _PickCalendarDialogState();
@@ -9,23 +13,20 @@ class PickCalendarDialog extends StatefulWidget {
 
 class _PickCalendarDialogState extends State<PickCalendarDialog> {
 
-  bool isLoading = false;
-
   @override
   Widget build(BuildContext context) {
 
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.5,
       height: MediaQuery.of(context).size.height * 0.3,
-      child: (isLoading)? const Center(child: CircularProgressIndicator(),):
-      ListView.builder(
-        itemCount: 5,
+      child: ListView.builder(
+        itemCount: widget.calendars.length,
         itemBuilder: (context, index) {
           return ListTile(
             leading: const Icon(Icons.calendar_today_rounded),
-            title: Text('Calendar $index'),
+            title: Text(widget.calendars[index].name?? ''),
             onTap: () {
-              Navigator.pop(context, index);
+              Navigator.pop(context, widget.calendars[index]);
             },
           );
         },

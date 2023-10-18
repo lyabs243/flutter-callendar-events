@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   return MovieCard(
                     key: Key(controller.movieScreenings[index].id),
+                    controller: controller,
                     item: controller.movieScreenings[index],
                   );
                 },

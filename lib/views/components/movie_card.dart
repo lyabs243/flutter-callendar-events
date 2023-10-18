@@ -1,4 +1,6 @@
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_events/controllers/movie_screening_controller.dart';
 import 'package:flutter_calendar_events/models/movie_screening_item.dart';
 import 'package:flutter_calendar_events/models/utils.dart';
 import 'package:flutter_calendar_events/views/components/pick_calendar_dialog.dart';
@@ -6,9 +8,10 @@ import 'package:intl/intl.dart';
 
 class MovieCard extends StatefulWidget {
 
+  final MovieScreeningController controller;
   final MovieScreeningItem item;
 
-  const MovieCard({super.key, required this.item});
+  const MovieCard({super.key, required this.item, required this.controller});
 
   @override
   State<MovieCard> createState() => _MovieCardState();
@@ -70,12 +73,16 @@ class _MovieCardState extends State<MovieCard> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return const AlertDialog(
-                      title: Text('Pick a calendar'),
-                      content: PickCalendarDialog(),
+                    return AlertDialog(
+                      title: const Text('Pick a calendar'),
+                      content: PickCalendarDialog(calendars: widget.controller.calendars),
                     );
                   },
-                );
+                ).then((value) {
+                  if (value is Calendar) {
+                    debugPrint('Calendar: ${value.name}');
+                  }
+                });
               },
             icon: SizedBox(
               height: 20,
