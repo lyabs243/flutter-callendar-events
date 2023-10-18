@@ -1,6 +1,7 @@
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_events/models/movie_screening_item.dart';
+import 'package:flutter_calendar_events/models/utils.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class MovieScreeningController {
@@ -11,10 +12,14 @@ class MovieScreeningController {
 
   init() async {
     await initCalendars();
-    initScreenings();
+    await initScreenings();
   }
 
   Future<bool> addToCalendar(Calendar calendar, MovieScreeningItem movieScreening) async {
+
+    // the process is too fast, so we add a delay to see the loading indicator
+    await Future.delayed(const Duration(seconds: 2));
+
     Event event = Event(
       calendar.id,
       eventId: movieScreening.id,
@@ -30,6 +35,7 @@ class MovieScreeningController {
     }
 
     if (result?.isSuccess?? false) {
+      debugPrint('======Add event to calendar result: ${result?.data}');
       return true;
     }
 
@@ -58,7 +64,7 @@ class MovieScreeningController {
 
       if (result.isSuccess) {
         for (Event event in result.data?? []) {
-          if (event.eventId == movieScreening.id) {
+          if (event.title == movieScreening.title) {
             return true;
           }
         }
@@ -68,7 +74,7 @@ class MovieScreeningController {
     return false;
   }
 
-  initScreenings() {
+  Future initScreenings() async {
     movieScreenings = [
       MovieScreeningItem(
         id: 'movie-screening-1',
@@ -101,6 +107,11 @@ class MovieScreeningController {
         dateTime: DateTime.now().add(const Duration(days: 10)),
       ),
     ];
+
+    for (MovieScreeningItem movieScreening in movieScreenings) {
+      movieScreening.state = await checkEventExist(movieScreening)? MovieEventState.added : MovieEventState.initial;
+    }
+
   }
 
 }
