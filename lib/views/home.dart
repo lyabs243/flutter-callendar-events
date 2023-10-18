@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_events/controllers/movie_screening_controller.dart';
 import 'package:flutter_calendar_events/views/components/movie_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,10 +11,30 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  bool isLoading = false;
+  bool isLoading = true;
+  MovieScreeningController controller = MovieScreeningController();
+
+  @override
+  void initState() {
+    super.initState();
+    initData();
+  }
+
+  initData() async {
+    setState(() {
+      isLoading = true;
+    });
+    await controller.init();
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    debugPrint('======Build home page: ${controller.calendars.length} - ${controller.movieScreenings.length}');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cinema Plus'),
