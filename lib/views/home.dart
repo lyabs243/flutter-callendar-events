@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_calendar_events/controllers/movie_screening_controller.dart';
 import 'package:flutter_calendar_events/views/components/movie_card.dart';
 
@@ -32,6 +33,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
