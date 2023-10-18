@@ -33,8 +33,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint('======Build home page: ${controller.calendars.length} - ${controller.movieScreenings.length}');
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cinema Plus'),
@@ -72,6 +70,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: (isLoading)? const Center(child: CircularProgressIndicator(),):
               GridView.builder(
+                itemCount: controller.movieScreenings.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.7,
@@ -79,7 +78,10 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  return MovieCard(key: Key('movie-$index'),);
+                  return MovieCard(
+                    key: Key(controller.movieScreenings[index].id),
+                    item: controller.movieScreenings[index],
+                  );
                 },
               )
             ),

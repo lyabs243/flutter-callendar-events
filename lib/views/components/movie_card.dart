@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_events/models/movie_screening_item.dart';
 import 'package:flutter_calendar_events/models/utils.dart';
 import 'package:flutter_calendar_events/views/components/pick_calendar_dialog.dart';
 import 'package:intl/intl.dart';
 
 class MovieCard extends StatefulWidget {
-  const MovieCard({super.key});
+
+  final MovieScreeningItem item;
+
+  const MovieCard({super.key, required this.item});
 
   @override
   State<MovieCard> createState() => _MovieCardState();
@@ -13,12 +17,16 @@ class MovieCard extends StatefulWidget {
 
 class _MovieCardState extends State<MovieCard> {
 
-  MovieEventState state = MovieEventState.initial;
+  late MovieScreeningItem item;
+
+  @override
+  void initState() {
+    super.initState();
+    item = widget.item;
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    state = MovieEventState.initial;
 
     return Container(
       decoration: BoxDecoration(
@@ -31,24 +39,24 @@ class _MovieCardState extends State<MovieCard> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/adventure.jpg'),
+                image: DecorationImage(
+                  image: AssetImage(item.imagePath),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
           const SizedBox(height: 10,),
-          const Text(
-            'Movie Name',
-            style: TextStyle(
+          Text(
+            item.title,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 10,),
           Text(
-            DateFormat(dateformat).format(DateTime.now()),
+            DateFormat(dateformat).format(item.dateTime),
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
@@ -56,7 +64,7 @@ class _MovieCardState extends State<MovieCard> {
           ),
           const SizedBox(height: 10,),
           ElevatedButton.icon(
-            onPressed: (state == MovieEventState.added)?
+            onPressed: (item.state == MovieEventState.added)?
               null:
               () {
                 showDialog(
@@ -83,7 +91,7 @@ class _MovieCardState extends State<MovieCard> {
   }
 
   Widget get _loadingView {
-    switch (state) {
+    switch (item.state) {
       case MovieEventState.loading:
         return const Center(
           child: CircularProgressIndicator(),
@@ -100,7 +108,7 @@ class _MovieCardState extends State<MovieCard> {
   }
 
   Color? get buttonBackgroundColor {
-    switch (state) {
+    switch (item.state) {
       case MovieEventState.added:
         return Colors.black12;
       case MovieEventState.loading:
@@ -110,7 +118,7 @@ class _MovieCardState extends State<MovieCard> {
   }
 
   String get buttonText {
-    switch (state) {
+    switch (item.state) {
       case MovieEventState.added:
         return 'Added';
       case MovieEventState.loading:
