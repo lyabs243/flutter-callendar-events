@@ -80,7 +80,32 @@ class _MovieCardState extends State<MovieCard> {
                   },
                 ).then((value) {
                   if (value is Calendar) {
-                    debugPrint('Calendar: ${value.name}');
+                    setState(() {
+                      item.state = MovieEventState.loading;
+                    });
+
+                    widget.controller.addToCalendar(value, item,).then((value) {
+
+                      if (value) {
+                        setState(() {
+                          item.state = MovieEventState.added;
+                        });
+                      }
+                      else {
+
+                        // show error message in snackbar
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('An error occurred while adding to calendar'),
+                          ),
+                        );
+
+                        setState(() {
+                          item.state = MovieEventState.initial;
+                        });
+                      }
+
+                    });
                   }
                 });
               },

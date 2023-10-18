@@ -20,6 +20,7 @@ class MovieScreeningController {
       eventId: movieScreening.id,
       title: movieScreening.title,
       start: tz.TZDateTime.from(movieScreening.dateTime, tz.local),
+      end: tz.TZDateTime.from(movieScreening.dateTime.add(const Duration(hours: 2)), tz.local),
     );
 
     Result<String>? result = await _deviceCalendarPlugin.createOrUpdateEvent(event);
